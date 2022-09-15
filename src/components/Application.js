@@ -11,6 +11,7 @@ export default function Application() {
     day: 'Monday',
     days: [],
     appointments: {},
+    interviewers: {},
   });
 
   const dailyAppointments = getAppointmentsForDay(state, state.day);
@@ -23,10 +24,12 @@ export default function Application() {
       axios.get('/api/appointments'), 
       axios.get('/api/interviewers')])
         .then(all => {
+          console.log(all[2]);
           setState(prev => ({
             ...prev,
             days: all[0].data,
             appointments: all[1].data,
+            interviewers: all[2].data,
           }));
         });
   }, []);
@@ -43,9 +46,10 @@ export default function Application() {
       </section>
       <section className='schedule'>
         {dailyAppointments.map(appointment => {
+          const interview = getInterview(state, appointment.interview)
           return (
             <>
-              <Appointment key={appointment.id} {...appointment} />
+              <Appointment key={appointment.id} {...appointment} interview={interview} />
               <Appointment key='last' time='5pm' />
             </>
           );
