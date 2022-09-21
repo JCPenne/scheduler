@@ -13,7 +13,6 @@ export function useVisualMode(initialMode) {
       history.push(mode)
     }
   }
-
   function back() {
     if (history.length > 1) {
       setMode(history.at(-1))
