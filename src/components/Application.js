@@ -19,7 +19,6 @@ export default function Application() {
   const setDay = day => setState({ ...state, day });
 
   const bookInterview = (id, interview) => {
-    // console.log(`bookInterview called`, id, interview);
     const appointment = {
       ...state.appointments[id],
       interview: { ...interview },
@@ -29,8 +28,19 @@ export default function Application() {
       [id]: appointment,
     };
 
-    return axios.put(`/api/appointments/${id}`, { interview })
-    .then(setState({ ...state, appointments }))
+    return axios.put(`/api/appointments/${id}`, { interview }).then(setState({ ...state, appointments }));
+  };
+
+  const cancelInterview = (id) => {
+    const appointment = {
+      ...state.appointments[id],
+      interview: null,
+    };
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment,
+    };
+    return axios.delete(`/api/appointments/${id}`).then(setState({ ...state, appointments }));
   };
 
   useEffect(() => {
@@ -64,6 +74,7 @@ export default function Application() {
               interview={interview}
               interviewers={dailyInterviewers}
               bookInterview={bookInterview}
+              cancelInterview={cancelInterview}
             />
           );
         })}
