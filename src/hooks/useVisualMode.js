@@ -7,6 +7,7 @@ export function useVisualMode(initialMode) {
   function transition(newMode, replace) {
     if (replace) {
       setMode(newMode);
+      setHistory((prev) => prev)
     }
     else {
       setMode(newMode);
@@ -14,9 +15,11 @@ export function useVisualMode(initialMode) {
     }
   }
   function back() {
+
     if (history.length > 1) {
       setMode(history.at(-1))
       history.pop()
+      console.log(`back`, history);
     }
   }
 
