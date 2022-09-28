@@ -36,7 +36,7 @@ export function getInterviewersForDay(state, day) {
 
 export function getInterview(state, interview) {
   let result = {};
-
+  
   if (interview === null) {
     return null;
   }
