@@ -21,30 +21,17 @@ export default function useApplicationData() {
   }, []);
 
   const setDay = day => setState({ ...state, day });
-  const currentDay = state.days.filter(day => state.day === day.name)[0];
 
   const updateSpots = (state, appointments) => {
-    let days = state.days;
-    let currentAppointments = 0;
+    let spots = 0;
     const currentDay = state.days.find(day => day.name === state.day);
 
-    currentDay.appointments.map(appointment => {
-      if (appointments[appointment].interview !== null) {
-        currentAppointments += 1;
-      }
-    });
-    currentDay.spots = 5 - currentAppointments;
+    currentDay.appointments.map(id => !appointments[id].interview && spots++);
 
-    return days;
+    const day = { ...currentDay, spots };
+
+    return state.days.map(d => (d.name === state.day ? day : d));
   };
-  //This function is working but I don't see how days is being altered, or why I can't just immediately return line 27 without running the function.
-
-  /*  Find the current day by filtering state.days - DONE
-For each appointment in currentDay
-Push the appointment from APPOINTMENTS into an array
-filter the array to show interviews that are not null
-Turn that to a number
-Have the current day's spots equal 5 minus the number in the line above */
 
   const bookInterview = (id, interview) => {
     const appointment = {
