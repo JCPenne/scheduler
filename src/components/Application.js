@@ -13,7 +13,7 @@ export default function Application() {
   const dailyInterviewers = getInterviewersForDay(state, state.day);
 
   return (
-    <main className='layout'>
+    <main className='layout' data-testid='AppMain'>
       <section className='sidebar'>
         <img className='sidebar--centered' src='images/logo.png' alt='Interview Scheduler' />
         <hr className='sidebar__separator sidebar--centered' />

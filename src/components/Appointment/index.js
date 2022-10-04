@@ -30,31 +30,48 @@ export default function Appointment(props) {
       student: name,
       interviewer,
     };
-    transition(SAVING,true);
+    transition(SAVING, true);
     props
       .bookInterview(props.id, interview)
-      .then((res) => res?.code ? transition(ERROR_SAVE, true) : transition(SHOW))
+      .then(() => transition(SHOW))
+      .catch(() => transition(ERROR_SAVE, true));
   }
 
   function cancel() {
-    transition(CANCEL,true);
+    transition(CANCEL, true);
     props
       .cancelInterview(props.id)
-      .then((res) => res?.code ? transition(ERROR_DELETE, true) : transition(EMPTY))
+      .then(() => transition(EMPTY))
+      .catch(() => transition(ERROR_DELETE, true));
   }
   return (
     <Fragment>
-      <article className='appointment' data-testid="appointment">
+      <article className='appointment' data-testid='appointment'>
         <Header time={props.time} />
         {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
-        {mode === SHOW && (<Show student={props.interview.student} interviewer={props.interview.interviewer || {}} onDelete={() => transition(CONFIRM)} onEdit={() => transition(EDIT)}/>)}
+        {mode === SHOW && (
+          <Show
+            student={props.interview.student}
+            interviewer={props.interview.interviewer || {}}
+            onDelete={() => transition(CONFIRM)}
+            onEdit={() => transition(EDIT)}
+          />
+        )}
         {mode === CREATE && <Form interviewers={props.interviewers} onCancel={back} onSave={save} />}
-        {mode === EDIT && (<Form student={props.interview.student} interviewer={props.interview.interviewer && props.interview.interviewer.id} interviewers={props.interviewers} onCancel={back} onSave={save} />)}
+        {mode === EDIT && (
+          <Form
+            student={props.interview.student}
+            interviewer={props.interview.interviewer && props.interview.interviewer.id}
+            interviewers={props.interviewers}
+            onCancel={back}
+            onSave={save}
+          />
+        )}
         {mode === SAVING && <Status message='Saving' />}
         {mode === CANCEL && <Status message='Deleting' />}
         {mode === CONFIRM && <Confirm message='Confirm appointment cancellation' onCancel={() => transition(SHOW)} onConfirm={cancel} />}
-        {mode === ERROR_SAVE && <Error message='error while saving' onClose={back}/>}
-        {mode === ERROR_DELETE && <Error message='error while deleting' onClose={back}/>}
+        {mode === ERROR_SAVE && <Error message='error while saving' onClose={back} />}
+        {mode === ERROR_DELETE && <Error message='error while deleting' onClose={back} />}
       </article>
     </Fragment>
   );

@@ -43,13 +43,10 @@ export default function useApplicationData() {
       [id]: appointment,
     };
 
-    return axios
-      .put(`/api/appointments/${id}`, { interview })
-      .then(() => {
-        const days = updateSpots(state, appointments);
-        setState({ ...state, appointments, days });
-      })
-      .catch(err => err);
+    return axios.put(`/api/appointments/${id}`, { interview }).then(() => {
+      const days = updateSpots(state, appointments);
+      setState({ ...state, appointments, days });
+    });
   };
 
   const cancelInterview = id => {
@@ -61,13 +58,10 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment,
     };
-    return axios
-      .delete(`/api/appointments/${id}`)
-      .then(() => {
-        const days = updateSpots(state, appointments);
-        setState({ ...state, appointments, days });
-      })
-      .catch(err => err);
+    return axios.delete(`/api/appointments/${id}`).then(() => {
+      const days = updateSpots(state, appointments);
+      setState({ ...state, appointments, days });
+    });
   };
 
   return { state, setDay, bookInterview, cancelInterview };
