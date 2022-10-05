@@ -56,7 +56,7 @@ export default function Form(props) {
           <Button danger onClick={Cancel}>
             Cancel
           </Button>
-          <Button confirm onClick={() => validate()}>
+          <Button confirm onClick={() => validate()} data-cy='Save'>
             Save
           </Button>
         </section>
