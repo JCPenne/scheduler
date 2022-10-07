@@ -10,13 +10,15 @@ export function useVisualMode(initialMode) {
       setHistory(prev => prev);
     } else {
       setMode(newMode);
-      history.push(mode);
+      const newHistory = [...history].push(mode);
+      setHistory(newHistory);
     }
   }
   function back() {
     if (history.length > 1) {
       setMode(history.at(-1));
-      history.pop();
+      const newHistory = [...history].pop();
+      setHistory(newHistory);
     }
   }
 
