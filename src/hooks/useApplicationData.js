@@ -8,7 +8,8 @@ export default function useApplicationData() {
     appointments: {},
     interviewers: {},
   });
-
+  
+//Retrieve API Data for App population
   useEffect(() => {
     Promise.all([axios.get('/api/days'), axios.get('/api/appointments'), axios.get('/api/interviewers')]).then(all => {
       setState(prev => ({
@@ -22,6 +23,12 @@ export default function useApplicationData() {
 
   const setDay = day => setState({ ...state, day });
 
+  /**
+   * Searches for null Appointment slots for the current Day and updates state with the resulting number
+   * @param {Object} state 
+   * @param {Object} appointments 
+   * @returns {Object} New State Object
+   */
   const updateSpots = (state, appointments) => {
     let spots = 0;
     const currentDay = state.days.find(day => day.name === state.day);
@@ -29,7 +36,7 @@ export default function useApplicationData() {
     currentDay.appointments.map(id => !appointments[id].interview && spots++);
 
     const day = { ...currentDay, spots };
-
+    //Update state with the new day variable
     return state.days.map(d => (d.name === state.day ? day : d));
   };
 
