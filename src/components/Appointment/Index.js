@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 
 import './styles.scss';
 
@@ -23,7 +23,18 @@ export default function Appointment(props) {
 	const ERROR_SAVE = 'ERROR_SAVE';
 	const ERROR_DELETE = 'ERROR_DELETE';
 
-	const { mode, transition, back } = useVisualMode(props.interview ? SHOW : EMPTY);
+	const { mode, transition, back } = useVisualMode(
+		props.interview ? SHOW : EMPTY,
+	);
+
+	useEffect(() => {
+		if (props.interview && mode === EMPTY) {
+			transition(SHOW);
+		}
+		if (props.interview === null && mode === SHOW) {
+			transition(EMPTY);
+		}
+	}, [props.interview, transition, mode]);
 
 	function save(name, interviewer) {
 		const interview = {
@@ -52,7 +63,7 @@ export default function Appointment(props) {
 			>
 				<Header time={props.time} />
 				{mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
-				{mode === SHOW && (
+				{mode === SHOW && props.interview && (
 					<Show
 						student={props.interview.student}
 						interviewer={props.interview.interviewer || {}}
@@ -70,7 +81,9 @@ export default function Appointment(props) {
 				{mode === EDIT && (
 					<Form
 						student={props.interview.student}
-						interviewer={props.interview.interviewer && props.interview.interviewer.id}
+						interviewer={
+							props.interview.interviewer && props.interview.interviewer.id
+						}
 						interviewers={props.interviewers}
 						onCancel={back}
 						onSave={save}
